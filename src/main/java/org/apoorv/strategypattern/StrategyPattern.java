@@ -1,4 +1,4 @@
-package org.apoorv;
+package org.apoorv.strategypattern;
 
 interface PaymentStrategy{
     void pay(double amount);
