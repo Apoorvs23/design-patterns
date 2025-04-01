@@ -5,10 +5,12 @@ import java.util.Optional;
 public class ParkVehicleCommandImpl implements ParkVehicleCommand{
     private final ParkingStrategy parkingStrategy;
     private final ParkingLot parkingLot;
+    private final String entranceGateId;
 
-    public ParkVehicleCommandImpl(ParkingStrategy parkingStrategy, ParkingLot parkingLot) {
+    public ParkVehicleCommandImpl(ParkingStrategy parkingStrategy, ParkingLot parkingLot, String entranceGateId) {
         this.parkingStrategy = parkingStrategy;
         this.parkingLot = parkingLot;
+        this.entranceGateId = entranceGateId;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class ParkVehicleCommandImpl implements ParkVehicleCommand{
             throw new Exception("No available spot found");
         }else{
             ParkingSlot parkingSlot = availableSpot.get();
-            ParkingTicket parkingTicket = parkingSlot.parkVehicle(vehicle);
+            ParkingTicket parkingTicket = parkingSlot.parkVehicle(vehicle, entranceGateId);
 
             System.out.println("Vehicle with number: "+vehicle.getVehicleNumber()+" parked at floor "+parkingLotFloor.getFloorNumber()+" at parking slot "+parkingSlot.getId());
 

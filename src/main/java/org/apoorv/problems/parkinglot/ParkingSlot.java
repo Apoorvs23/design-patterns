@@ -20,9 +20,9 @@ public abstract class ParkingSlot {
         return Objects.isNull(parkedVehicle);
     }
 
-    public ParkingTicket parkVehicle(Vehicle vehicle) {
+    public ParkingTicket parkVehicle(Vehicle vehicle, String entranceGateId) {
         this.parkedVehicle = vehicle;
-        return new ParkingTicket(vehicle, floorNumber, id);
+        return new ParkingTicket(vehicle, floorNumber, id, entranceGateId);
     }
 
     public void unparkVehicle() {

@@ -17,14 +17,44 @@ class ParkingLot {
     -parkingTickets: HashSet<String>
     -parkVehicleCommand: ParkVehicleCommand
     -unparkVehicleCommand: UnparkVehicleCommand
+    -entranceGates: List<EntranceGate>
+    -exitGates: List<ExitGate>
     +getParkingLot(): ParkingLot
     +addFloor(floorNumber: int, totalSlots: int): void
     +getParkingLotFloor(floorNumber: int): ParkingLotFloor
+    +getParkingLotFloors(): Collection<ParkingLotFloor>
     +addParkingTicket(ticketNumber: String): void
     +checkParkingTicket(ticketNumber: String): void
     +removeParkingTicket(ticketNumber: String): void
-    +parkVehicle(vehicle: Vehicle, floorNumber: int): String
+    +parkVehicle(vehicle: Vehicle, floorNumber: int, entranceGateId: String): String
     +unparkVehicle(ticketNumber: String, paymentStrategy: PaymentStrategy): void
+    +addEntranceGate(gate: EntranceGate): void
+    +addExitGate(gate: ExitGate): void
+    +getEntranceGates(): List<EntranceGate>
+    +getExitGates(): List<ExitGate>
+}
+
+' Gate Classes
+class EntranceGate {
+    -gateId: String
+    -parkingLot: ParkingLot
+    -isAvailable: boolean
+    +EntranceGate(gateId: String, parkingLot: ParkingLot)
+    +getGateId(): String
+    +registerVehicle(vehicle: Vehicle): String
+    +isAvailable(): boolean
+    +setAvailable(available: boolean): void
+}
+
+class ExitGate {
+    -gateId: String
+    -parkingLot: ParkingLot
+    -isAvailable: boolean
+    +ExitGate(gateId: String, parkingLot: ParkingLot)
+    +getGateId(): String
+    +processExit(ticketNumber: String, paymentStrategy: PaymentStrategy): void
+    +isAvailable(): boolean
+    +setAvailable(available: boolean): void
 }
 
 class ParkingLotFloor {
@@ -58,7 +88,7 @@ abstract class ParkingSlot {
     -parkedVehicle: Vehicle
     +ParkingSlot(id: int, floorNumber: int)
     +isAvailable(): boolean
-    +parkVehicle(vehicle: Vehicle): ParkingTicket
+    +parkVehicle(vehicle: Vehicle, entranceGateId: String): ParkingTicket
     +unparkVehicle(): void
     +canPark(vehicle: Vehicle): boolean
 }
@@ -83,6 +113,8 @@ interface UnparkVehicleCommand {
 class ParkVehicleCommandImpl {
     -parkingStrategy: ParkingStrategy
     -parkingLot: ParkingLot
+    -entranceGateId: String
+    +ParkVehicleCommandImpl(parkingStrategy: ParkingStrategy, parkingLot: ParkingLot, entranceGateId: String)
     +parkVehicle(vehicle: Vehicle, floorNumber: int): String
 }
 
@@ -133,8 +165,10 @@ class PaymentStrategyFactory {
 ' Other Classes
 class ParkingTicket {
     -ticketId: String
-    +ParkingTicket(vehicle: Vehicle, floorNumber: int, parkingSlotId: int)
+    -entranceGateId: String
+    +ParkingTicket(vehicle: Vehicle, floorNumber: int, parkingSlotId: int, entranceGateId: String)
     +getTicketId(): String
+    +getEntranceGateId(): String
 }
 
 ' Relationships
@@ -161,11 +195,17 @@ ParkingLot o-- UnparkVehicleCommand : has-a
 ParkVehicleCommandImpl o-- ParkingStrategy : has-a
 ParkVehicleCommandImpl o-- ParkingLot : has-a
 UnparkVehicleImp o-- ParkingLot : has-a
+ParkingLot *-- EntranceGate : has-a
+ParkingLot *-- ExitGate : has-a
+EntranceGate o-- ParkingLot : has-a
+ExitGate o-- ParkingLot : has-a
 
 ' Dependencies (uses)
 ParkingLot ..> ParkingTicket : uses
 ParkVehicleCommandImpl ..> ParkingTicket : uses
 UnparkVehicleImp ..> PaymentStrategy : uses
+EntranceGate ..> Vehicle : uses
+ExitGate ..> PaymentStrategy : uses
 
 ' Factory Dependencies (creates)
 VehicleFactory ..> Vehicle : creates
