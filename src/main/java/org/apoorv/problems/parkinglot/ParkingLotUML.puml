@@ -1,0 +1,192 @@
+@startuml Parking Lot System
+
+' Style settings
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+}
+
+' Title
+title Parking Lot System - UML Class Diagram
+
+' Core Classes
+class ParkingLot {
+    -parkingLotFloors: HashMap<Integer, ParkingLotFloor>
+    -parkingTickets: HashSet<String>
+    -parkVehicleCommand: ParkVehicleCommand
+    -unparkVehicleCommand: UnparkVehicleCommand
+    +getParkingLot(): ParkingLot
+    +addFloor(floorNumber: int, totalSlots: int): void
+    +getParkingLotFloor(floorNumber: int): ParkingLotFloor
+    +addParkingTicket(ticketNumber: String): void
+    +checkParkingTicket(ticketNumber: String): void
+    +removeParkingTicket(ticketNumber: String): void
+    +parkVehicle(vehicle: Vehicle, floorNumber: int): String
+    +unparkVehicle(ticketNumber: String, paymentStrategy: PaymentStrategy): void
+}
+
+class ParkingLotFloor {
+    -floorNumber: int
+    -parkingSlots: HashMap<Integer, ParkingSlot>
+    +ParkingLotFloor(floorNumber: int, totalSlots: int)
+    +getAllParkingSlots(): List<ParkingSlot>
+    +getParkingSlot(slotId: int): ParkingSlot
+    +getFloorNumber(): int
+}
+
+' Vehicle Hierarchy
+abstract class Vehicle {
+    -vehicleNumber: String
+    +Vehicle(vehicleNumber: String)
+    +getVehicleNumber(): String
+}
+
+class Car {
+    +Car(vehicleNumber: String)
+}
+
+class MotorCycle {
+    +MotorCycle(vehicleNumber: String)
+}
+
+' Parking Slot Hierarchy
+abstract class ParkingSlot {
+    -id: int
+    -floorNumber: int
+    -parkedVehicle: Vehicle
+    +ParkingSlot(id: int, floorNumber: int)
+    +isAvailable(): boolean
+    +parkVehicle(vehicle: Vehicle): ParkingTicket
+    +unparkVehicle(): void
+    +canPark(vehicle: Vehicle): boolean
+}
+
+class CarParkingSlot {
+    +CarParkingSlot(id: int, floorNumber: int)
+}
+
+class MotorCycleParkingSlot {
+    +MotorCycleParkingSlot(id: int, floorNumber: int)
+}
+
+' Command Pattern
+interface ParkVehicleCommand {
+    +parkVehicle(vehicle: Vehicle, floorNumber: int): String
+}
+
+interface UnparkVehicleCommand {
+    +unparkVehicle(ticketNumber: String, paymentStrategy: PaymentStrategy): void
+}
+
+class ParkVehicleCommandImpl {
+    -parkingStrategy: ParkingStrategy
+    -parkingLot: ParkingLot
+    +parkVehicle(vehicle: Vehicle, floorNumber: int): String
+}
+
+class UnparkVehicleImp {
+    -parkingLot: ParkingLot
+    +unparkVehicle(ticketNumber: String, paymentStrategy: PaymentStrategy): void
+}
+
+' Strategy Pattern
+interface ParkingStrategy {
+    +findAvailableSpot(vehicle: Vehicle, parkingLotFloor: ParkingLotFloor): Optional<ParkingSlot>
+}
+
+class FirstAvailableStrategy {
+    +findAvailableSpot(vehicle: Vehicle, parkingLotFloor: ParkingLotFloor): Optional<ParkingSlot>
+}
+
+interface PaymentStrategy {
+    +pay(amount: double): void
+}
+
+class CreditCardPayment {
+    -cardNumber: String
+    -cvv: String
+    -expiryDate: String
+    +pay(amount: double): void
+}
+
+class DebitCardPayment {
+    -cardNumber: String
+    -pin: String
+    +pay(amount: double): void
+}
+
+' Factory Pattern
+class VehicleFactory {
+    +createVehicle(type: String, vehicleNumber: String): Vehicle
+}
+
+class ParkingSlotFactory {
+    +createParkingSlot(type: String, id: int, floorNumber: int): ParkingSlot
+}
+
+class PaymentStrategyFactory {
+    +createPaymentStrategy(type: String, params: String...): PaymentStrategy
+}
+
+' Other Classes
+class ParkingTicket {
+    -ticketId: String
+    +ParkingTicket(vehicle: Vehicle, floorNumber: int, parkingSlotId: int)
+    +getTicketId(): String
+}
+
+' Relationships
+
+' IS-A Relationships (extends)
+Vehicle <|-- Car : extends
+Vehicle <|-- MotorCycle : extends
+ParkingSlot <|-- CarParkingSlot : extends
+ParkingSlot <|-- MotorCycleParkingSlot : extends
+
+' Implements Relationships
+ParkVehicleCommand <|.. ParkVehicleCommandImpl : implements
+UnparkVehicleCommand <|.. UnparkVehicleImp : implements
+ParkingStrategy <|.. FirstAvailableStrategy : implements
+PaymentStrategy <|.. CreditCardPayment : implements
+PaymentStrategy <|.. DebitCardPayment : implements
+
+' HAS-A Relationships (Composition - strong ownership)
+ParkingLot *-- ParkingLotFloor : has-a
+ParkingLotFloor *-- ParkingSlot : has-a
+ParkingSlot o-- Vehicle : has-a
+ParkingLot o-- ParkVehicleCommand : has-a
+ParkingLot o-- UnparkVehicleCommand : has-a
+ParkVehicleCommandImpl o-- ParkingStrategy : has-a
+ParkVehicleCommandImpl o-- ParkingLot : has-a
+UnparkVehicleImp o-- ParkingLot : has-a
+
+' Dependencies (uses)
+ParkingLot ..> ParkingTicket : uses
+ParkVehicleCommandImpl ..> ParkingTicket : uses
+UnparkVehicleImp ..> PaymentStrategy : uses
+
+' Factory Dependencies (creates)
+VehicleFactory ..> Vehicle : creates
+ParkingSlotFactory ..> ParkingSlot : creates
+PaymentStrategyFactory ..> PaymentStrategy : creates
+
+' Notes for Design Patterns
+note right of ParkingLot
+  Singleton Pattern
+end note
+
+note right of VehicleFactory
+  Factory Pattern
+end note
+
+note right of ParkingStrategy
+  Strategy Pattern
+end note
+
+note right of ParkVehicleCommand
+  Command Pattern
+end note
+
+@enduml 
