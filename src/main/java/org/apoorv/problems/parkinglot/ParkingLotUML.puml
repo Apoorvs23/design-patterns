@@ -132,6 +132,21 @@ class FirstAvailableStrategy {
     +findAvailableSpot(vehicle: Vehicle, parkingLotFloor: ParkingLotFloor): Optional<ParkingSlot>
 }
 
+class ClosestEntranceStrategy {
+    -entranceMinHeaps: Map<String, PriorityQueue<ParkingSlot>>
+    -availableSpots: Set<ParkingSlot>
+    -reservedSpots: Set<ParkingSlot>
+    -spotDistances: Map<ParkingSlot, Map<String, Integer>>
+    +ClosestEntranceStrategy()
+    +findAvailableSpot(vehicle: Vehicle, parkingLotFloor: ParkingLotFloor): Optional<ParkingSlot>
+    +initializeParkingLot(parkingLot: ParkingLot): void
+    +releaseSpot(spot: ParkingSlot): void
+    -calculateDistances(slot: ParkingSlot, parkingLot: ParkingLot): void
+    -calculateManhattanDistance(entrance: EntranceGate, slot: ParkingSlot): int
+    -markSpotAsReserved(spot: ParkingSlot): void
+    -getCurrentEntranceId(): String
+}
+
 interface PaymentStrategy {
     +pay(amount: double): void
 }
@@ -183,6 +198,7 @@ ParkingSlot <|-- MotorCycleParkingSlot : extends
 ParkVehicleCommand <|.. ParkVehicleCommandImpl : implements
 UnparkVehicleCommand <|.. UnparkVehicleImp : implements
 ParkingStrategy <|.. FirstAvailableStrategy : implements
+ParkingStrategy <|.. ClosestEntranceStrategy : implements
 PaymentStrategy <|.. CreditCardPayment : implements
 PaymentStrategy <|.. DebitCardPayment : implements
 
@@ -223,6 +239,8 @@ end note
 
 note right of ParkingStrategy
   Strategy Pattern
+  - FirstAvailableStrategy: Simple sequential search
+  - ClosestEntranceStrategy: Min-heap based distance optimization
 end note
 
 note right of ParkVehicleCommand

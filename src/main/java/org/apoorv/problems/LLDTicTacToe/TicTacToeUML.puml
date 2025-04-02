@@ -1,0 +1,161 @@
+@startuml
+
+' Style settings
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+}
+
+' Design Pattern Notes
+note right of TicTacToeGame
+  Design Patterns Used:
+  1. Strategy Pattern (Win Strategies)
+  2. Factory Pattern (Player Creation)
+  3. Interface-based Design
+end note
+
+' Enums
+enum PieceType {
+    X
+    O
+}
+
+' Interfaces
+interface GameInterface {
+    +initializeGame(): void
+    +startGame(): String
+    +isGameOver(): boolean
+    +getCurrentPlayer(): Player
+}
+
+interface WinStrategy {
+    +checkWin(board: Board, row: int, column: int, pieceType: PieceType): boolean
+}
+
+' Classes
+class TicTacToeGame {
+    -playerManager: PlayerManager
+    -gameBoard: Board
+    -winConditionChecker: WinConditionChecker
+    -gameOver: boolean
+    +initializeGame(): void
+    +startGame(): String
+    +isGameOver(): boolean
+    +getCurrentPlayer(): Player
+}
+
+class Board {
+    +size: int
+    +board: PlayingPiece[][]
+    +addPiece(row: int, column: int, playingPiece: PlayingPiece): boolean
+    +getFreeCells(): List<Pair<Integer, Integer>>
+    +printBoard(): void
+}
+
+class Player {
+    +name: String
+    +playingPiece: PlayingPiece
+    +getName(): String
+    +setName(name: String): void
+    +getPlayingPiece(): PlayingPiece
+    +setPlayingPiece(playingPiece: PlayingPiece): void
+}
+
+class PlayingPiece {
+    +pieceType: PieceType
+}
+
+class PlayingPieceX {
+}
+
+class PlayingPieceO {
+}
+
+class PlayerManager {
+    -players: Deque<Player>
+    +addPlayer(player: Player): void
+    +getCurrentPlayer(): Player
+    +nextPlayer(): Player
+    +keepCurrentPlayer(): void
+}
+
+class WinConditionChecker {
+    -board: Board
+    -winStrategies: List<WinStrategy>
+    +checkWinner(row: int, column: int, pieceType: PieceType): boolean
+}
+
+class PlayerFactory {
+    +createPlayer(name: String, pieceType: PieceType): Player
+    -createPiece(pieceType: PieceType): PlayingPiece
+}
+
+class Pair<K,V> {
+    -first: K
+    -second: V
+    +getFirst(): K
+    +getSecond(): V
+}
+
+' Strategy Pattern Classes
+class RowWinStrategy {
+    +checkWin(board: Board, row: int, column: int, pieceType: PieceType): boolean
+}
+
+class ColumnWinStrategy {
+    +checkWin(board: Board, row: int, column: int, pieceType: PieceType): boolean
+}
+
+class DiagonalWinStrategy {
+    +checkWin(board: Board, row: int, column: int, pieceType: PieceType): boolean
+}
+
+class AntiDiagonalWinStrategy {
+    +checkWin(board: Board, row: int, column: int, pieceType: PieceType): boolean
+}
+
+' Relationships
+TicTacToeGame ..|> GameInterface
+RowWinStrategy ..|> WinStrategy
+ColumnWinStrategy ..|> WinStrategy
+DiagonalWinStrategy ..|> WinStrategy
+AntiDiagonalWinStrategy ..|> WinStrategy
+
+PlayingPieceX --|> PlayingPiece
+PlayingPieceO --|> PlayingPiece
+
+TicTacToeGame --> PlayerManager
+TicTacToeGame --> Board
+TicTacToeGame --> WinConditionChecker
+TicTacToeGame --> Player
+
+Board --> PlayingPiece
+Board --> Pair
+
+Player --> PlayingPiece
+
+PlayerManager --> Player
+
+WinConditionChecker --> Board
+WinConditionChecker --> WinStrategy
+
+PlayerFactory --> Player
+PlayerFactory --> PlayingPieceX
+PlayerFactory --> PlayingPieceO
+
+' Design Pattern Notes
+note right of WinConditionChecker
+  Strategy Pattern:
+  - Different win checking strategies
+  - Easy to add new strategies
+end note
+
+note right of PlayerFactory
+  Factory Pattern:
+  - Creates players and pieces
+  - Encapsulates object creation
+end note
+
+@enduml 
