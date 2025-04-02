@@ -1,4 +1,6 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.factories;
+
+import org.apoorv.problems.parkinglot.models.*;
 
 public class VehicleFactory {
     public static Vehicle createVehicle(String type, String vehicleNumber) {

@@ -1,4 +1,6 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.payment;
+
+import org.apoorv.problems.parkinglot.models.*;
 
 public class DebitCardPayment implements PaymentStrategy{
     private final String cardNumber;

@@ -1,4 +1,4 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.models;
 
 public abstract class Vehicle {
     private final String vehicleNumber;

@@ -1,4 +1,9 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.services;
+
+import org.apoorv.problems.parkinglot.models.*;
+import org.apoorv.problems.parkinglot.commands.UnparkVehicleCommand;
+import org.apoorv.problems.parkinglot.commands.UnparkVehicleImp;
+import org.apoorv.problems.parkinglot.payment.PaymentStrategy;
 
 public class ExitGate {
     private final String gateId;

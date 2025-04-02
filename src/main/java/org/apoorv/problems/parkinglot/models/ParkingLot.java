@@ -1,10 +1,18 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.models;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.apoorv.problems.parkinglot.commands.ParkVehicleCommand;
+import org.apoorv.problems.parkinglot.commands.ParkVehicleCommandImpl;
+import org.apoorv.problems.parkinglot.commands.UnparkVehicleCommand;
+import org.apoorv.problems.parkinglot.commands.UnparkVehicleImp;
+import org.apoorv.problems.parkinglot.services.EntranceGate;
+import org.apoorv.problems.parkinglot.services.ExitGate;
+import org.apoorv.problems.parkinglot.strategies.FirstAvailableStrategy;
+import org.apoorv.problems.parkinglot.payment.PaymentStrategy;
 
 public class ParkingLot {
     private final HashMap<Integer, ParkingLotFloor> parkingLotFloors; // floor number -> floor

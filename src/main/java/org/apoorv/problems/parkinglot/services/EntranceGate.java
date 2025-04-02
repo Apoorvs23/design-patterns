@@ -1,7 +1,11 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.services;
 
 import java.util.List;
 import java.util.ArrayList;
+import org.apoorv.problems.parkinglot.models.*;
+import org.apoorv.problems.parkinglot.strategies.ParkingStrategy;
+import org.apoorv.problems.parkinglot.commands.ParkVehicleCommand;
+import org.apoorv.problems.parkinglot.commands.ParkVehicleCommandImpl;
 
 public class EntranceGate {
     private final String gateId;

@@ -1,6 +1,8 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.commands;
 
 import java.util.Optional;
+import org.apoorv.problems.parkinglot.models.*;
+import org.apoorv.problems.parkinglot.strategies.ParkingStrategy;
 
 public class ParkVehicleCommandImpl implements ParkVehicleCommand{
     private final ParkingStrategy parkingStrategy;

@@ -1,5 +1,21 @@
 package org.apoorv.problems.parkinglot;
 
+import org.apoorv.problems.parkinglot.models.*;
+import org.apoorv.problems.parkinglot.services.EntranceGate;
+import org.apoorv.problems.parkinglot.services.ExitGate;
+import org.apoorv.problems.parkinglot.strategies.FirstAvailableStrategy;
+import org.apoorv.problems.parkinglot.strategies.ParkingStrategy;
+import org.apoorv.problems.parkinglot.commands.ParkVehicleCommand;
+import org.apoorv.problems.parkinglot.commands.ParkVehicleCommandImpl;
+import org.apoorv.problems.parkinglot.commands.UnparkVehicleCommand;
+import org.apoorv.problems.parkinglot.commands.UnparkVehicleImp;
+import org.apoorv.problems.parkinglot.factories.VehicleFactory;
+import org.apoorv.problems.parkinglot.factories.ParkingSlotFactory;
+import org.apoorv.problems.parkinglot.factories.PaymentStrategyFactory;
+import org.apoorv.problems.parkinglot.payment.PaymentStrategy;
+import org.apoorv.problems.parkinglot.payment.CreditCardPayment;
+import org.apoorv.problems.parkinglot.payment.DebitCardPayment;
+
 public class Main {
     public static void main(String[] args) throws Exception {
         ParkingLot parkingLot = ParkingLot.getParkingLot();

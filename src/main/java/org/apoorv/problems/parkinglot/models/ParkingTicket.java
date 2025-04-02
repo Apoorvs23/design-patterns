@@ -1,4 +1,4 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.models;
 
 import java.util.Date;
 

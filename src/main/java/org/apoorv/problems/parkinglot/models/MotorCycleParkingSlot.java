@@ -1,4 +1,4 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.models;
 
 public class MotorCycleParkingSlot extends ParkingSlot{
     public MotorCycleParkingSlot(int id, int floorNumber) {

@@ -1,6 +1,7 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.strategies;
 
 import java.util.Optional;
+import org.apoorv.problems.parkinglot.models.*;
 
 public class FirstAvailableStrategy implements ParkingStrategy{
     @Override

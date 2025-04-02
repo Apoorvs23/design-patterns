@@ -1,4 +1,6 @@
-package org.apoorv.problems.parkinglot;
+package org.apoorv.problems.parkinglot.factories;
+
+import org.apoorv.problems.parkinglot.payment.*;
 
 public class PaymentStrategyFactory {
     public static PaymentStrategy createPaymentStrategy(String type, String... params) {
